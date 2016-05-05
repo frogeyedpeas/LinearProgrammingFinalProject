@@ -1,6 +1,28 @@
-from numpy import *
+
 import numpy as np
 
+
+
+
+
+def DiagonalNewton(d0,d1,Q,lamb,tolerance):
+    while(linalg.norm(d1 -d0) > tolerance):
+        d0 = d1
+        D = np.diag(d1)
+        y = linalg.matrix_power((linalg.matrix_power(D,-2)+Q),-1)*(linalg.matrix_power(np.diag(D,-1) )-Q*d1)
+        lamb = (np.transpose(y) * linalg.matrix_power(D,-2)*y  + np.transpose(y)*Q*y)[0] #computing lambda
+        #lamb < 1, a = 1 lamb >=1 1, a = 1/2
+        if lamb > 1:
+            d1 = d0 + float(1)/(1 + lamb)*y
+
+        else:
+            d1 = d0 + y
+
+
+
+            
+            
+    
 
 def HomogenousProgram(Q,eps,gamma): #matrix Q, item e
 
@@ -39,12 +61,5 @@ def HomogenousProgram(Q,eps,gamma): #matrix Q, item e
 
 
 
-
-x = array([1,2,3,4])
-y = diag(x)
-print y
-
-
-#need to create unit vector
 
 

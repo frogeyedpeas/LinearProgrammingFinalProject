@@ -68,26 +68,29 @@ while i < 5:
         if j != 0 and i !=0:
             #rendering plots now:
             k = 0
+            X = []
+            Y = []
+            Z = []
             while k < 10:
-                X = []
-                Y = []
-                Z = []
                 h = 0
+                X.append(k)
+                Y.append(k)
+                Z.append([])
                 while h < 10:
-                    X.append(h)
-                    Y.append(k)
+                
                     teal = DiagonalNewton(np.array([0,0]),np.array([h,k]), np.diag(np.array([i,j])),.001)
                     if teal != None:
-                        Z.append(teal[2])
+                        Z[k].append(teal[2])
                     else:
-                        Z.append(0)
+                        Z[k].append(0)
                     h+=1
     
                 k+=1
             fig = plt.figure()
             ax = plt.axes(projection='3d')
-            ax.plot_wireframe(X, Y, Z)
-            plt.savefig("Image: "+str(i)+ ","+str(j))
+            xx,yy = np.meshgrid(X,Y)
+            ax.plot_wireframe(xx, yy, Z)
+            plt.savefig("Image: "+str(i)+ ","+str(j), cmap=plt.cm.jet, rstride=.01, cstride=.01, linewidth=1,alpha=0)
             
         j+=1
     i+=1

@@ -7,6 +7,21 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
+
+
+
+def pointToLineSegement(point, start,end):
+    direction = start - end
+    normalized = direction/(np.norm(direction))
+    phase = start - normalized #starting from this point, moving one unit at a time we pass through the line
+    maxbound = norm(direction) #so from K = 1 to K = maxbound we are on the line segment, phase + K*normalized 
+    # Line = normalized + 
+    
+    possible = np.dot(phase - point,)
+
+
+
+
 def DiagonalNewton(d0,d1,Q,tolerance):
 
     if tolerance <= 0:
@@ -19,8 +34,11 @@ def DiagonalNewton(d0,d1,Q,tolerance):
     except linalg.LinAlgError:
         print "Matrix is either not positive semidefinite, or nonsquare"
         return None
-    
+
+    e = np.ones(d1.size)
     w = linalg.norm(d1 -d0)
+    D = np.diag(d1)
+    w = linalg.norm(np.dot(np.dot(np.dot(D,Q),D),e)-e)
     iterationcounter = 0
     while(w > tolerance):
         d0 = d1
@@ -49,7 +67,7 @@ def DiagonalNewton(d0,d1,Q,tolerance):
 
         else:
             d1 = d0 + y
-        w = linalg.norm(d1 -d0)
+        w = linalg.norm(np.dot(np.dot(np.dot(D,Q),D),e)-e)
 
         iterationcounter += 1
 
@@ -78,7 +96,7 @@ while i < 5:
                 Z.append([])
                 while h < 10:
                 
-                    teal = DiagonalNewton(np.array([0,0]),np.array([h,k]), np.diag(np.array([i,j])),.001)
+                    teal = DiagonalNewton(np.array([0,0]),np.array([h,k]), np.diag(np.array([i,j])),.00000001)
                     if teal != None:
                         Z[k].append(teal[2])
                     else:
@@ -104,48 +122,6 @@ while i < 5:
 
 
 
-
-
-
-
-
-            
-            
-    
-
-def HomogenousProgram(Q,eps,gamma): #matrix Q, item e
-
-    def PhaseI(Q,eps,gamma):
-        #verify that input is good
-
-        if eps <= 0:
-            print "epsilon <= 0, algorithm won't terminate"
-            return None
-
-        #verify if Q is positive semidefinite, correct dimensions
-        try:
-            y = linalg.cholesky(Q)
-        except linalg.LinAlgError:
-            print "Matrix is either not positive semidefinite, or nonsquare"
-            return None
-
-
-        #Step 0:
-        
-        params = Q.shape
-        #need to create unit vector
-        e = ones(params[0])
-        u = e - Q*e
-        d = e
-        t = 1
-
-        rstar = (params[0]**0.5 - gamma)/(params[0]**0.5-gamma**2)
-        CGam = linalg.norm(u)**2*(2*params[0] + gamma*(1 + params[0]**0.5))/gamma**2
-        tstar = eps/CGam
-
-        #Step 1:
-
-        
 
 
 
